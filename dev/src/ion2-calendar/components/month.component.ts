@@ -36,7 +36,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
                   [class.next-month-day]="day.isNextMonth"
                   [class.on-selected]="isSelected(day.time)"
                   [disabled]="day.disable"
-                  [attr.aria-label]="getDayLabel(day) | date : DAY_DATE_FORMAT">
+                  [attr.aria-label]="getDayLabel(day)">
                   <p>{{ day.title }}</p>
                   <small *ngIf="day.subTitle">{{ day?.subTitle }}</small>
                 </button>
@@ -68,7 +68,8 @@ export const MONTH_VALUE_ACCESSOR: any = {
                   [class.is-first]="day.isFirst"
                   [class.is-last]="day.isLast"
                   [class.on-selected]="isSelected(day.time)"
-                  [disabled]="day.disable">
+                  [disabled]="day.disable"
+                  [attr.aria-label]="getDayLabel(day)">
                   <p>{{ day.title }}</p>
                   <small *ngIf="day.subTitle">{{ day?.subTitle }}</small>
                 </button>
@@ -111,7 +112,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   public _onChanged!: Function;
   public _onTouched!: Function;
 
-  readonly DAY_DATE_FORMAT = 'MMMM dd, yyyy';
 
   get _isRange(): boolean {
     return this.pickMode === pickModes.RANGE;
@@ -154,8 +154,10 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     return this._date[1].time === day.time;
   }
 
-  getDayLabel(day: CalendarDay) {
-    return new Date(day.time);
+  getDayLabel(day: CalendarDay): string {
+    const date = new Date(day.time);
+    const formatted = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    return day.isToday ? `Today, ${formatted}` : formatted;
   }
 
   isBetween(day: CalendarDay): boolean {

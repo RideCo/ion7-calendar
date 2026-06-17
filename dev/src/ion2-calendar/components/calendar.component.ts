@@ -12,7 +12,8 @@ import {
 import { CalendarService } from '../services/calendar.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import * as moment from 'moment';
+import * as _moment from 'moment';
+const moment = (_moment as any).default || _moment;
 import { defaults, pickModes } from '../config';
 import { isIonIconsV4 } from '../utils/icons';
 

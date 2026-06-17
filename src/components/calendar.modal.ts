@@ -12,7 +12,8 @@ import {
 import {IonContent, ModalController, NavParams} from '@ionic/angular';
 import {CalendarDay, CalendarModalOptions, CalendarMonth, InternalCalendarModalOptions} from '../calendar.model';
 import {CalendarService} from '../services/calendar.service';
-import * as moment from 'moment';
+import * as _moment from 'moment';
+const moment = (_moment as any).default || _moment;
 import {pickModes} from '../config';
 
 const NUM_OF_MONTHS_TO_CREATE = 6;
