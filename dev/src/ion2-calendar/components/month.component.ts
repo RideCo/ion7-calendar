@@ -2,6 +2,9 @@ import { Component, ChangeDetectorRef, Input, Output, EventEmitter, forwardRef, 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CalendarDay, CalendarMonth, CalendarOriginal, PickMode } from '../calendar.model';
 import { defaults, pickModes } from '../config';
+import * as _moment from 'moment';
+import 'moment/min/locales';
+const moment = (_moment as any).default || _moment;
 
 export const MONTH_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -36,7 +39,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
                   [class.next-month-day]="day.isNextMonth"
                   [class.on-selected]="isSelected(day.time)"
                   [disabled]="day.disable"
-                  [attr.aria-label]="getDayLabel(day) | date : DAY_DATE_FORMAT">
+                  [attr.aria-label]="getDayLabel(day)">
                   <p>{{ day.title }}</p>
                   <small *ngIf="day.subTitle">{{ day?.subTitle }}</small>
                 </button>
@@ -68,7 +71,8 @@ export const MONTH_VALUE_ACCESSOR: any = {
                   [class.is-first]="day.isFirst"
                   [class.is-last]="day.isLast"
                   [class.on-selected]="isSelected(day.time)"
-                  [disabled]="day.disable">
+                  [disabled]="day.disable"
+                  [attr.aria-label]="getDayLabel(day)">
                   <p>{{ day.title }}</p>
                   <small *ngIf="day.subTitle">{{ day?.subTitle }}</small>
                 </button>
@@ -111,7 +115,6 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
   public _onChanged!: Function;
   public _onTouched!: Function;
 
-  readonly DAY_DATE_FORMAT = 'MMMM dd, yyyy';
 
   get _isRange(): boolean {
     return this.pickMode === pickModes.RANGE;
@@ -154,8 +157,15 @@ export class MonthComponent implements ControlValueAccessor, AfterViewInit {
     return this._date[1].time === day.time;
   }
 
-  getDayLabel(day: CalendarDay) {
-    return new Date(day.time);
+  getDayLabel(day: CalendarDay): string {
+    const lang = document.documentElement.getAttribute('lang') || 'en';
+    const m = moment(day.time).locale(lang);
+    const formatted = m.format('LL');
+    if (day.isToday) {
+      const todayLabel = m.calendar().split(' ')[0]; // e.g. "Today", "Aujourd'hui", "Hoy"
+      return `${todayLabel}, ${formatted}`;
+    }
+    return formatted;
   }
 
   isBetween(day: CalendarDay): boolean {

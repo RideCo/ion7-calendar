@@ -5,7 +5,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es2017"],
-    "module": "commonjs",
+    "module": "ES2020",
     "moduleResolution": "node",
     "noImplicitAny": false,
     "noUnusedLocals": true,
@@ -13,7 +13,7 @@
     "outDir": "./dist",
     "removeComments": false,
     "sourceMap": true,
-    "target": "es5"
+    "target": "ES2020"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["demo/", "dist/", "lazyload-demo/", "node_modules", "lib/"],

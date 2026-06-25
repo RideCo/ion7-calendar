@@ -1,5 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import * as moment from 'moment';
+import * as _moment from 'moment';
+const moment = (_moment as any).default || _moment;
 
 import {
   CalendarDay,
