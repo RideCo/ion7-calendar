@@ -3,6 +3,7 @@ import { CalendarMonth } from '../calendar.model';
 import { defaults } from '../config';
 
 @Component({
+  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ion-calendar-month-picker',
   styleUrls: ['./month-picker.component.scss'],
