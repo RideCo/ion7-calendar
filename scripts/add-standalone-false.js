@@ -35,14 +35,25 @@ const files = fs.readdirSync(componentsDir).filter((f) => f.endsWith('.js'));
 let patched = 0;
 for (const file of files) {
   const filePath = path.join(componentsDir, file);
-  let content = fs.readFileSync(filePath, 'utf8');
+  const content = fs.readFileSync(filePath, 'utf8');
 
-  if (content.includes('ɵɵdefineComponent') && !content.includes('standalone:')) {
-    content = content.replace(
-      /ɵɵdefineComponent\(\{/g,
-      'ɵɵdefineComponent({ standalone: false,'
-    );
-    fs.writeFileSync(filePath, content, 'utf8');
+  if (!content.includes('ɵɵdefineComponent')) {
+    continue;
+  }
+
+  // Only inject when the runtime component definition itself is missing the
+  // flag. The Angular 15 compiler DOES emit `standalone: false` into the
+  // `ɵsetClassMetadata` reflection block, but NOT into `ɵɵdefineComponent`,
+  // which is what the runtime reads. So we must scope the check to the
+  // `ɵɵdefineComponent({ ... })` call and not the whole file (otherwise the
+  // metadata occurrence would make us skip the real, required injection).
+  const patched_content = content.replace(
+    /ɵɵdefineComponent\(\{(?![^})]*standalone:)/g,
+    'ɵɵdefineComponent({ standalone: false,'
+  );
+
+  if (patched_content !== content) {
+    fs.writeFileSync(filePath, patched_content, 'utf8');
     patched++;
     console.log(`add-standalone-false: patched ${file}`);
   }
