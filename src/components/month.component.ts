@@ -13,6 +13,7 @@ export const MONTH_VALUE_ACCESSOR: any = {
 };
 
 @Component({
+  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ion-calendar-month',
   providers: [MONTH_VALUE_ACCESSOR],

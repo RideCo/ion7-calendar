@@ -19,6 +19,7 @@ import {pickModes} from '../config';
 const NUM_OF_MONTHS_TO_CREATE = 6;
 
 @Component({
+  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ion-calendar-modal',
   styleUrls: ['./calendar.modal.scss'],

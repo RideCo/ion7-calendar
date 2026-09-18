@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { defaults } from '../config';
 
 @Component({
+  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ion-calendar-week',
   styleUrls: ['./calendar-week.component.scss'],

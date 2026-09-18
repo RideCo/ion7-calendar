@@ -31,6 +31,7 @@ interface CompatibleIcons {
 }
 
 @Component({
+  standalone: false,
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'ion-calendar',
   providers: [ION_CAL_VALUE_ACCESSOR],
